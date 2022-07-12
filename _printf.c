@@ -1,50 +1,47 @@
 #include "main.h"
-#include <stdarg.h>
-#include <stdio.h>
+#include<stdio.h>
+#include<stdlib.h>
 /**
- *_printf - is a function that selects the correct function to print.
- * @format: identifier to look for.
- * Return: the length of the string.
+ *_printf - main function to printf
+ *@format: Arrey of stings to print
+ *Return: Number of character printed
  */
 int _printf(const char *format, ...)
 {
-	int count = 0, i;
+	int count = -1;
 
-	va_list data;
-
-	va_start(data, format);
-
-	for (i = 0; format[i] != '\0'; )
+	if (format != NULL)
 	{
-		if (format[i] != '%')
+		int i;
+
+		va_list ar_list;
+		int (*o)(va_list);
+
+		va_start(ar_list, format);
+
+		if (format[0] == '%' && format[1] == '\0')
+			return (-1);
+		count = 0;
+		for (i = 0; format[i] != '\0'; i++)
 		{
-			count += _putchar(format[i]);
-			i++;
-		}
-		else if (format[i] == '%' && format[i + 1] != ' ')
-		{
-			switch (format[i + 1])
+			if (format[i] == '%')
 			{
-				case 'c':
-					count += _putchar(va_arg(data, int));
-					break;
-				case 's':
-					count += print_string(va_arg(data, char *));
-					break;
-				case '%':
-					count += _putchar('%');
-					break;
-				case 'd':
-					count += print_decimal(va_arg(data, int));
-					break;
-				case 'i':
-					count += print_decimal(va_arg(data, int));
-					break;
-				default:
-					break;
+				if (format[i + 1] == '%')
+				{
+					count += _putchar(format[i]);
+					i++;
+				}
+				else if (format[i + 1] != '\0')
+				{
+					o = get_func(format[i + 1]);
+					count += (o ? o(ar_list) : _putchar(format[i]) + _putchar(format[i + 1]));
+					i++;
+				}
 			}
-			i += 2;
+			else
+				count += _putchar(format[i]);
 		}
+		va_end(ar_list);
 	}
 	return (count);
 }
