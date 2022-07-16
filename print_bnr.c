@@ -22,7 +22,7 @@ int print_bnr(va_list arguments, char *buf, unsigned int ibuf)
 	if (int_input < 0)
 	{
 		int_input = (int_input * -1) - 1;
-		issnegative = 1;
+		isnegative = 1;
 	}
 	binary = malloc(sizeof(char) * (32 + 1));
 	binary = fill_binary_array(binary, int_input, isnegative, 32);
